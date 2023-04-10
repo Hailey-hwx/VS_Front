@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>继承</title>
+</head>
+
+<body>
+    <script>
+        // class extends super 继承
+        class Parent {
+            constructor(home, age, name) {
+                this.home = home;
+                this.age = age;
+                this.name = name;
+            }
+            getAge() {
+                console.log(this.age);
+            }
+        }
+        class Child extends Parent {
+            constructor(home, age, name, school) {
+                super(home, age, name);
+                this.school = school;
+            }
+        }
+        const parent = new Parent('a', 34, '111');
+        const child = new Child('b', 10, '111', '222');
+        child.getAge();
+
+        // 构造函数继承  5种方法
+        // 1. 原型继承
+        // 缺点：
+        // 1. 创建⼦类实例的时候，不能传⽗类的参数（⽐如name）。
+        // 2. ⼦类实例共享了⽗类构造函数的引⽤属性，⽐如arr属性。
+        // 3. ⽆法实现多继承。
+        function Parent1(name) {
+            this.name = name || '⽗亲';
+            this.arr = [1];
+        }
+        Parent1.prototype.say = function () {
+            console.log('hello');
+        }
+        function Child1(like) {
+            this.like = like;
+        }
+        Child1.prototype = new Parent1()
+        Child1.prototype.constructor = Child1
+
+        // 2. 构造函数继承
+        // 缺点
+        // 1. ⽗类的⽅法不能复⽤
+        // 由于⽅法在⽗构造函数中定义，导致⽅法不能复⽤(因为每次创建⼦类实例都要创建⼀遍⽅法)。
+        // ⽐如say⽅法。(⽅法应该要复⽤、共享)
+        // 2. ⼦类实例，继承不了⽗类原型上的属性。(因为没有⽤到原型)
+        function Parent2(name) {
+            this.name = name || '⽗亲';
+            this.arr = [1];
+            this.say1 = function() {
+                console.log('hello');
+            }
+        }
+        Parent2.prototype.say2 = function () {
+            console.log('hello');
+        }
+        function Child2(name, like) {
+            Parent2.call(this, name);
+            this.like = like;
+        }
+
+        // 3. 组合继承  1 + 2
+        function Parent3(name) {
+            this.name = name || '⽗亲';
+            this.arr = [1];
+        }
+        Parent3.prototype.say = function () {
+            console.log('hello')
+        }
+        function Child3(name, like) {
+            Parent3.call(this, name);
+            this.like = like;
+        }
+        Child3.prototype = new Parent3();
+        Child3.prototype.constructor = Child3;
+
+        // 4. 组合继承优化1
+        function Parent4(name) {
+            this.name = name || '⽗亲';
+            this.arr = [1];
+        }
+        Parent4.prototype.say = function () {
+            console.log('hello')
+        }
+        function Child4(name, like) {
+            Parent4.call(this, name);
+            this.like = like;
+        }
+        Child4.prototype = Parent4.prototype;
+        Child4.prototype.constructor = Child4;
+
+        // 5. 组合继承优化2----寄生组合继承
+        function Parent5(name) {
+            this.name = name || '⽗亲';
+            this.arr = [1];
+        }
+        Parent5.prototype.say = function () {
+            console.log('hello')
+        }
+        function Child5(name, like) {
+            Parent5.call(this, name);
+            this.like = like;
+        }
+        Child5.prototype = Object.create(Parent5.prototype);
+        Child5.prototype.constructor = Child5;
+    </script>
+</body>
+
+</html>

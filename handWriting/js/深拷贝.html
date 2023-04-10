@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深拷贝</title>
+</head>
+<body>
+    <script>
+        const arr = [1, [2], {name: '123'}];
+
+        // 简易版
+        const deepCopy = function(target) {
+            let copyTarget = target instanceof Array? [] : {};
+            for (let key in target) {
+                if (target.hasOwnProperty(key)) {
+                    if (typeof target[key] === 'object') {
+                        copyTarget[key] = deepCopy(target[key]);
+                    } else {
+                        copyTarget[key] = target[key];
+                    }
+                }
+            }
+            return copyTarget;
+        } 
+
+        // 使用map
+        let map = new Map();
+        const deepCopy_map = function(target) {
+            if (map.has(target)) return map.get(target);
+            let copyTarget = target instanceof Array? [] : {};
+            for (let key in target) {
+                if (target.hasOwnProperty(key)) {
+                    if (typeof target[key] === 'object') {
+                        copyTarget[key] = deepCopy_map(target[key]);
+                    } else {
+                        copyTarget[key] = target[key];
+                    }
+                }
+            }
+            map.set(target, copyTarget);
+            return copyTarget;
+        }
+
+        let newarr = deepCopy_map(arr);
+        newarr[2].name = 'hhh';
+        newarr[1][0] = 0;
+        newarr[0] = 5;
+        console.log(arr);
+        console.log(newarr);
+    </script>
+</body>
+</html>

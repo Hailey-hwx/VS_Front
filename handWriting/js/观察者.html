@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>观察者模式</title>
+</head>
+
+<body>
+    <script>
+        // 被观察对象Subject
+        class Subject {
+            constructor() {
+                this.observers = [];
+            }
+            // 添加观察者
+            add(observer) {
+                this.observers.push(observer);
+            }
+            // 通知
+            notify(msg) {
+                for (var i = 0; i < this.observers.length; i++) {
+                    observers[i].update(msg);
+                }
+            }
+            // 删除观察者
+            remove(observer) {
+                for (var i = 0; i < this.observers.length; i++) {
+                    if (observers[i] === observer) {
+                        observers.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // 观察者Observer
+        class Observer {
+            constructor(name) {
+                this.name = name;
+            }
+            // 更新
+            update(msg) {
+                console.log(this.name + ',' + msg);
+            }
+        }
+
+        var sub = new Subject();
+        var obs1 = new Observer('ttsy1');
+        var obs2 = new Observer('ttsy2');
+        sub.add(obs1);
+        sub.add(obs2);
+        sub.notify('有新消息了！'); 
+    </script>
+</body>
+
+</html>

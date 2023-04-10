@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组拍平</title>
+</head>
+<body>
+    <script>
+        let arr = [1, [2, [3, [4, 5]]]];
+
+        // 1. falt
+        let a1 = arr;
+        a1 = a1.flat(Infinity);
+        console.log(a1);
+
+        // 2. string + split
+        let a2 = arr;
+        a2 = arr.toString().split(',').map(item => parseInt(item));
+        console.log(a2);
+
+        // 3. for
+        let a3 = [];
+        const _for = function(arr) {
+            for (let a of arr) {
+                if (Array.isArray(a)) {
+                    _for(a);
+                }
+                else a3.push(a);
+            }
+        }
+        _for(arr);
+        console.log(a3);
+
+        // 4. reduce + concat
+        const _reduce = function(arr) {
+            return arr.reduce((pre, cur) => {
+                return pre.concat(Array.isArray(cur) ? _reduce(cur) : cur);
+            }, []);
+        }
+        let a4 = _reduce(arr);
+        console.log(a4);
+
+        // 5. ... + concat
+        let a5 = arr;
+        while (a5.some(a => Array.isArray(a))) {
+            a5 = [].concat(...a5);
+        }
+        console.log(a5)
+    </script>
+</body>
+</html>

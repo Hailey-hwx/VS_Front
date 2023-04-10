@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布订阅</title>
+</head>
+<body>
+    <script>
+        class EventBus {
+            constructor() {
+                this.events = {};
+            };
+            // 订阅
+            subscribe(e, fn) {
+                if (typeof fn !== 'function') console.log('缺少正确的回调函数！');
+                if (!this.events[e]) {
+                    this.events[e] = [];
+                }
+                this.events[e].push(fn);
+            }
+            // 取消订阅
+            unsubscribe(e, fn) {
+                if (!this.events[e]) {
+                    console.log('请输入正确的事件！');
+                }else {
+                    this.events[e].forEach((f, index) => {
+                        if (f === fn) {
+                            this.events[e].splice(index, 1);
+                        }
+                    });
+                    console.log('已取消订阅');
+                }
+            }
+            // 发布
+            publish(e, ...arg) {
+                if (!this.events[e]) {
+                    console.log('没有相关事件！');
+                } else {
+                    for (let fn of this.events[e]) {
+                        fn(...arg);
+                    }
+                }
+            }
+        }
+        // 调度中心
+        let eventbus = new EventBus();
+
+        // 发布人
+        class Publisher {
+            constructor() {};
+            go_publish(e, name) {
+                eventbus.publish(e, name);
+            }
+        }
+
+        // 订阅人
+        class Subscriber {
+            constructor() {};
+            get_subscribe(e, fn) {
+                eventbus.subscribe(e, fn);
+            }
+            delete_subscribe(e, fn) {
+                eventbus.unsubscribe(e, fn);
+            }
+        }
+
+        const publisher = new Publisher();
+        const subscriber = new Subscriber();
+
+        // 订阅
+        const hello = function(name) {
+            console.log('hello! ' + name);
+        }
+        subscriber.get_subscribe('hello', hello);
+        subscriber.get_subscribe('hhh', 123);
+
+        // 发布
+        publisher.go_publish('hello', 'huweixuan');
+        publisher.go_publish('aaa');
+
+        // 取消订阅
+        subscriber.delete_subscribe('hello', hello);
+        publisher.go_publish('hello', 'huweixuan');
+    </script>
+</body>
+</html>

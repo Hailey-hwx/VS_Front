@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮询</title>
+</head>
+<body>
+    <script>
+        
+    export default function polling(type, url, data, delay = 1000) {
+        return new Promise((resolve, reject) =>{
+            ajax[type](url, data).then(res => {
+                if (res.data === 'polling') {  // 这个继续进行轮询的条件，需要根据自己的需要修改
+                    setTimeout(() => {
+                        resolve(polling(type, url, data, delay));
+                    }, delay)
+                } else {
+                   resolve(res);
+               }
+           })
+       })
+    }
+    </script>
+</body>
+</html>

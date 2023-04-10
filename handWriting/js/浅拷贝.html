@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浅拷贝</title>
+</head>
+<body>
+    <script>
+    // 引起浅拷贝
+	// 1. 引用数据类型的直接复制
+	// 2. Object.assign()
+	// 3. Array.slice()
+	// 4. Array.concat()
+	// 5. 展开运算符  ...
+
+        const arr = [1, [2], {name: '123'}];
+
+        const shallowCopy = function(target) {
+            let copyTarget = target instanceof Array? [] : {};
+            for (let key in target) {
+                if (target.hasOwnProperty(key)) {
+                    copyTarget[key] = target[key];
+                } 
+            }
+            return copyTarget;
+        }
+
+        let newarr = shallowCopy(arr);
+        newarr[2].name = 'hhh';
+        newarr[1][0] = 0;
+        newarr[0] = 5;
+        console.log(arr);
+        console.log(newarr);
+    </script>
+</body>
+</html>

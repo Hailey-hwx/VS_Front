@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数柯里化</title>
+</head>
+
+<body>
+    <script>
+        const add = function (a, b, c, d) {
+            return a + b + c + d;
+        }
+
+        function curry(fn, ...args) {
+            var len = fn.length;
+            var args = [].concat(args);
+            return function(...params) {
+                args.push(...params);
+                if (args.length < len) {
+                    return curry.call(this, fn, ...args);
+                }
+                return fn.call(this, ...args);
+            }
+        }
+
+        const curryadd = curry(add, 1);
+        console.log(curryadd);
+        console.log(curryadd(2, 3)(4));
+    </script>
+</body>
+
+</html>

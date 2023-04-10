@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期</title>
+</head>
+
+<body>
+    <script>
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        // var Book = {}
+        // var name = '';
+        // Object.defineProperty(Book, 'name', {
+        //     set: function (value) {
+        //         name = value;
+        //         console.log('你取了一个书名叫做' + value);
+        //     },
+        //     get: function () {
+        //         return '《' + name + '》'
+        //     }
+        // })
+
+        // Book.name = 'vue权威指南';  // 你取了一个书名叫做vue权威指南
+        // console.log(Book.name);  // 《vue权威指南》
+
+        // var obj = {
+        //     '2' : 3,
+        //     '3' : 4,
+        //     'length': 2,
+        //     'push' : Array.prototype.push
+        // }
+        // obj.push(1)
+        // obj.push(2)
+        // console.log(obj);//{2: 1, 3: 2, length: 4, push: ƒ}
+
+        window.number = 2;
+        var obj = {
+            number: 3,
+            db1: (function () {
+                console.log(this);
+                this.number *= 4;
+                return function () {
+                    console.log(this);
+                    this.number *= 5;
+                }
+            })()
+        }
+        var db1 = obj.db1;
+        db1();
+        obj.db1();
+        console.log(obj.number);     // 15
+        console.log(window.number);  // 40
+    </script>
+</body>
+
+</html>

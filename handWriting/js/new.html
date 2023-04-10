@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写new</title>
+</head>
+<body>
+    <script>
+
+	// 1. 创建一个空对象 {}；
+	// 2. 空对象的原型属性 __proto__ 指向构造函数的原型对象 Person.prototype；
+	// 3. 函数中的 this 设置为这个空对象，传参；
+	// 4. 如果该函数不返回一个对象，就返回这个 this，否则返回这个对象。
+
+        function _new(constructor, ...args) {
+            let obj = Object.create(constructor.prototype);
+            let res = constructor.call(obj, ...args);
+            return typeof res === 'object'? res : obj;
+        }
+
+        function P (num) {
+            this.v = num;
+            // return {v : num};
+        }
+
+        const p = _new(P, 1);
+        console.log(p);
+    </script>
+</body>
+</html>

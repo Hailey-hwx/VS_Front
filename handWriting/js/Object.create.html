@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object.create</title>
+</head>
+<body>
+    <script>
+        // 将传入的对象作为原型
+        function obj_create(proto) {
+            if (typeof proto !== 'object' || proto === null) return;
+            let fn = function(){};
+            fn.prototype = proto;
+            return new fn();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>call_apply_bind</title>
+</head>
+
+<body>
+    <script>
+        // call    接收一系列参数
+        Function.prototype._call = function (_this, ...args) {
+            if (!_this) _this = Object.create(null);
+            _this.fn = this;
+            let res = _this.fn(...args);
+            delete (_this.fn);
+            return res;
+        }
+
+        function add(a, b) {
+            let sum = this.v + a + b
+            console.log(sum)
+            return sum;
+        }
+        add._call({ v: 1 }, 2, 3) // 6
+
+        // apply    接收参数数组
+        Function.prototype._apply = function (_this, args = []) {
+            if (!_this) _this = Object.create(null);
+            _this.fn = this;
+            let res = _this.fn(...args);
+            delete (_this.fn);
+            return res;
+        }
+
+        add._apply({ v: 1 }, [2, 3]) // 6
+
+        // bind     传参与call相同  注意判断有无new
+        Function.prototype._bind = function (_this, ...arg) {
+            if (!_this) _this = Object.create(null);
+            const fn = this;
+            return function F(...params) {
+                if (this instanceof F) {
+                    return new fn(...arg, ...params);
+                } else {
+                    return fn.call(_this, ...arg, ...params);
+                }
+            }
+        }
+
+        function add2(a, b) {
+            this.v = (this.v || 0) + a + b
+            console.log(this);
+            return this
+        }
+        const newAdd = add2._bind({ v: 1 }, 2)
+        newAdd(3)
+        new newAdd(3)
+    </script>
+</body>
+
+</html>

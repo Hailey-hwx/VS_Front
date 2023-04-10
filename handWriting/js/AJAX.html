@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+</head>
+<body>
+    <script>
+        // 原生手写AJAX
+        const url = 'www.baidu.com';
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET',url);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.onreadystatechange = function() {
+            console.log(this);
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    handle(this.response);
+                } else {
+                    console.log(this.statusText);
+                }
+            }
+        }
+        xhr.onerror = function() {
+            console.error(this.statusText);
+        }
+        xhr.send();
+        
+        // promise 封装
+        function request(url) {
+            let promise = new Promise((resolve, reject) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', url);
+                xhr.setRequestHeader('Cache-Control', 'no-cache');
+                xhr.onreadystatechange = function() {
+                    if (this.readyState === 4) {
+                        if (this.status === 200) {
+                            resolve(this.response);
+                        } else {
+                            reject(this.statusText);
+                        }
+                    }
+                }
+                xhr.onerror = function() {
+                    reject(this.statusText);
+                }
+                xhr.send();
+            })
+            return promise;
+        }
+    </script>
+</body>
+</html>

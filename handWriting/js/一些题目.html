@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一些题目</title>
+</head>
+
+<body>
+    <script>
+        // 1. 
+        var j = 0;
+        for (let i = 0; i < 2; i++, j++) {
+            setTimeout(function () {
+                console.log(i, j);
+            }, 1000)
+        }
+        // 0 2
+        // 1 2
+
+        // 2. 
+        var person = {
+            age: 18,
+            getAge: function () {
+                return this.age;
+            }
+        }
+        var getAge = person.getAge;
+        console.log(person.getAge(), getAge());
+        // 18 undefined
+
+        // 3. 数据结构转换与递归算法
+        // 将数组格式数据转换为树形结构，其中根节点的 id 为 0。
+        // 原始数据
+        const arr = [
+            { id: 0, name: 'r' },
+            { id: 1, name: 'r.e1', pid: 0 },
+            { id: 2, name: 'r.a1', pid: 0 },
+            { id: 9, name: 'r.d1', pid: 0 },
+            { id: 7, name: 'r.c1.cc1.ccc1', pid: 6 },
+            { id: 3, name: 'r.b1', pid: 0 },
+            { id: 6, name: 'r.c1.cc1', pid: 5 },
+            { id: 4, name: 'r.a1.aa1', pid: 2 },
+            { id: 5, name: 'r.c1', pid: 0 },
+            { id: 8, name: 'r.c1.cc1.ccc2', pid: 6 },
+        ];
+
+        // 输出结果示例
+        // const result = {
+        //   "id": 0,
+        //   "name": "r",
+        //   "children": [
+        //     {
+        //       "id": 1,
+        //       "name": "r.e1",
+        //       "pid": 0
+        //     },
+        //     {
+        //       "id": 2,
+        //       "name": "r.a1",
+        //       "pid": 0,
+        //       "children": [
+        //         {
+        //           "id": 4,
+        //           "name": "r.a1.aa1",
+        //           "pid": 2
+        //         }
+        //       ]
+        //     },
+        //     {
+        //       "id": 9,
+        //       "name": "r.d1",
+        //       "pid": 0
+        //     },
+        //     {
+        //       "id": 3,
+        //       "name": "r.b1",
+        //       "pid": 0
+        //     },
+        //     {
+        //       "id": 5,
+        //       "name": "r.c1",
+        //       "pid": 0,
+        //       "children": [
+        //         {
+        //           "id": 6,
+        //           "name": "r.c1.cc1",
+        //           "pid": 5,
+        //           "children": [
+        //             {
+        //               "id": 7,
+        //               "name": "r.c1.cc1.ccc1",
+        //               "pid": 6
+        //             },
+        //             {
+        //               "id": 8,
+        //               "name": "r.c1.cc1.ccc2",
+        //               "pid": 6
+        //             }
+        //           ]
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
+
+        function arrayToTree(arr, parentId = 0) {
+            const tree = [];
+            arr.forEach(item => {
+                if (item.pid === parentId) {
+                    const children = arrayToTree(arr, item.id)
+                    if (children.length > 0) {
+                        item.children = children;
+                    }
+                    tree.push(item)
+                }
+            })
+            return tree
+        }
+        let tree = arr[0];
+        tree.children = arrayToTree(arr)
+        console.log(JSON.stringify(tree, null, 2));
+
+        // 4. 
+        setTimeout(() => {
+            console.log(0)
+        }, 0)
+        new Promise((resolve, reject) => {
+            console.log(1)
+            resolve()
+        }).then(() => {
+            console.log(2)
+            new Promise((resolve, reject) => {
+                console.log(3)
+                resolve()
+            }).then(() => {
+                console.log(4)
+            }).then(() => {
+                console.log(5)
+            })
+        }).then(() => {
+            console.log(6)
+        })
+        new Promise((resolve, reject) => {
+            console.log(7)
+            resolve()
+        }).then(() => {
+            console.log(8)
+        })
+        // 1 7 2 3 8 4 6 5 0
+
+
+        // 有关then链式调用执行顺序
+        // （1）promise的链式调用两个then，第二个then的注册需要等第一个then内的同步代码执行完成。并且微任务队列是先注册先执行。
+        // （2）如果第一个then内有return，第二个then会等return 语句执行完才开始注册
+        // 1.
+        new Promise((resolve, reject) => {
+            console.log("外部promise");
+            resolve();
+        })
+            .then(() => {
+                console.log("外部第一个then");
+                return new Promise((resolve, reject) => {
+                    console.log("内部promise");
+                    resolve();
+                })
+                    .then(() => {
+                        console.log("内部第一个then");
+                    })
+                    .then(() => {
+                        console.log("内部第二个then");
+                    });
+            })
+            .then(() => {
+                console.log("外部第二个then");
+            });
+        // 外部promise
+        // 外部第一个then
+        // 内部promise
+        // 内部第一个then
+        // 内部第二个then
+        // 外部第二个then
+
+
+        // 2. 
+        new Promise((resolve, reject) => {
+            console.log("外部promise");
+            resolve();
+        })
+            .then(() => {
+                console.log("外部第一个then");
+                new Promise((resolve, reject) => {
+                    console.log("内部promise");
+                    resolve();
+                })
+                    .then(() => {
+                        console.log("内部第一个then");
+                    })
+                    .then(() => {
+                        console.log("内部第二个then");
+                    });
+            })
+            .then(() => {
+                console.log("外部第二个then");
+            });
+        // 外部promise
+        // 外部第一个then
+        // 内部promise
+        // 内部第一个then
+        // 外部第二个then
+        // 内部第二个then    
+
+
+        // 3. 
+        new Promise((resolve, reject) => {
+            console.log("外部promise");
+            resolve();
+        })
+            .then(() => {
+                console.log("外部第一个then");
+                let p = new Promise((resolve, reject) => {
+                    console.log("内部promise");
+                    resolve();
+                })
+                p.then(() => {
+                    console.log("内部第一个then");
+                })
+                p.then(() => {
+                    console.log("内部第二个then");
+                });
+            })
+            .then(() => {
+                console.log("外部第二个then");
+            });
+        // 外部promise
+        // 外部第一个then
+        // 内部promise
+        // 内部第一个then
+        // 内部第二个then
+        // 外部第二个then
+
+
+        // 4.
+        let p = new Promise((resolve, reject) => {
+            console.log("外部promise");
+            resolve();
+        })
+        p.then(() => {
+            console.log("外部第一个then");
+            new Promise((resolve, reject) => {
+                console.log("内部promise");
+                resolve();
+            })
+                .then(() => {
+                    console.log("内部第一个then");
+                })
+                .then(() => {
+                    console.log("内部第二个then");
+                });
+        })
+        p.then(() => {
+            console.log("外部第二个then");
+        });
+        // 外部promise
+        // 外部第一个then
+        // 内部promise
+        // 外部第二个then
+        // 内部第一个then
+        // 内部第二个then
+
+        // 5.
+        new Promise((resolve, reject) => {
+            console.log("外部promise");
+            resolve();
+        })
+            .then(() => {
+                console.log("外部第一个then");
+                new Promise((resolve, reject) => {
+                    console.log("内部promise");
+                    resolve();
+                })
+                    .then(() => {
+                        console.log("内部第一个then");
+                    })
+                    .then(() => {
+                        console.log("内部第二个then");
+                    });
+                return new Promise((resolve, reject) => {
+                    console.log("内部promise2");
+                    resolve();
+                })
+                    .then(() => {
+                        console.log("内部第一个then2");
+                    })
+                    .then(() => {
+                        console.log("内部第二个then2");
+                    });
+            })
+            .then(() => {
+                console.log("外部第二个then");
+            });
+        // 外部promise
+        // 外部第一个then
+        // 内部promise
+        // 内部promise2
+        // 内部第一个then
+        // 内部第一个then2
+        // 内部第二个then
+        // 内部第二个then2
+        // 外部第二个then
+
+        // 6.
+        Promise.resolve(1)
+            .then(2)
+            .then(Promise.resolve(3))
+            .then(console.log)
+        // 1
+
+    </script>
+</body>
+
+</html>

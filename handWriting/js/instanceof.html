@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>instanceof</title>
+</head>
+<body>
+    <script>
+        const _instanceof = function (source, target) {
+            let proto = Object.getPrototypeOf(source);
+            while (proto) {
+                if (proto == target.prototype) return true;
+                else proto = Object.getPrototypeOf(proto);
+            }
+            return false;
+        }
+
+        console.log(_instanceof([1], Array));
+    </script>
+</body>
+</html>
