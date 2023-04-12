@@ -8,6 +8,11 @@
 </head>
 <body>
     <script>
+        // 深拷贝方法
+	// 1. _.cloneDeep()
+	// 2. .jQuery.extend()
+	// 3. JSON.parse(JSON.stringify())   // 但存在忽略undefined、symbol和函数的弊端
+
         const arr = [1, [2], {name: '123'}];
 
         // 简易版
