@@ -135,32 +135,67 @@
 
         // getimg('url').then(() => {console.log('yes')}).catch(() => {console.log('no')});
 
-        console.log(1)
-
+        // console.log(1)
         
-        setTimeout(function () {
-            console.log(2);
-            setTimeout(function () {
-                console.log(9);
-            })
-            let pro2 = new Promise(function (resolve, reject) {
-                console.log(7);
-                resolve();
-            }).then((r) => { console.log(8) })
-        })
+        // setTimeout(function () {
+        //     console.log(2);
+        //     setTimeout(function () {
+        //         console.log(9);
+        //     })
+        //     let pro2 = new Promise(function (resolve, reject) {
+        //         console.log(7);
+        //         resolve();
+        //     }).then((r) => { console.log(8) })
+        // })
 
-        let pro = new Promise(function (resolve, reject) {
-            console.log(3)
-            resolve();
-        }).then((r) => { console.log(4) })
+        // let pro = new Promise(function (resolve, reject) {
+        //     console.log(3)
+        //     resolve();
+        // }).then((r) => { console.log(4) })
 
-        let fn = async function () {
-            console.log(5)
-            let a = await pro;
-            console.log(6);
-        }
-        fn();
+        // let fn = async function () {
+        //     console.log(5)
+        //     let a = await pro;
+        //     console.log(6);
+        // }
+        // fn();
         // 1 3 5 4 6 2 7 8 9
+
+        console.log(2.1 << 1); // 4
+
+        var obj = {a: 10, b: false};
+        console.log(obj?.b) // false
+        console.log(obj.b ?? obj.a); // false  与||有区别，??前面是null或者undefined才会取后面的值
+
+        // 函数提升优先于变量提升，且不会被变量声明覆盖，但会被变量赋值覆盖
+        // js编译器顺序
+        // function showName() {
+        //     console.log(1);
+        // }
+        // var showName;
+        // showName();
+        // showName = function() {
+        //     console.log(2);
+        // }
+        // showName()
+        // showName()
+
+        showName();
+        var showName = function() {
+            console.log(2);
+        }
+        showName();
+        function showName() {
+            console.log(1);
+        }        
+        showName()
+
+        // 数组转对象 
+        const sourse = [1,2,3]
+        const target = {...sourse};
+        // Object.assign(target, sourse);
+        console.log(target)
+
     </script>
 </body>
 
